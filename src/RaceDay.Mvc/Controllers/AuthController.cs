@@ -13,7 +13,8 @@ public class AuthController(ApiClient api):BaseController
   if(!ModelState.IsValid)return View(vm);
         //Logs out the user and clears their session information.
         var r =await api.Post("api/auth/login",new{vm.Email,vm.Password});
-  if(!r.Ok){ModelState.AddModelError("","Email or password is incorrect, or the API is unavailable.");return View(vm);}
+        //  Manages user authentication, registration and logout functionality for RaceDay.
+        if (!r.Ok){ModelState.AddModelError("","Email or password is incorrect, or the API is unavailable.");return View(vm);}
   var u=r.Data.GetProperty("user"); HttpContext.Session.SetInt32("UserId",u.GetProperty("userId").GetInt32());
   HttpContext.Session.SetString("Role",u.GetProperty("role").GetString()??"Participant");
   HttpContext.Session.SetString("FullName",u.GetProperty("fullName").GetString()??"");
