@@ -8,6 +8,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 // Register HTTP context access to retrieve information about the current user request.
 builder.Services.AddHttpContextAccessor();
+// Configure session services for maintaining user login information.
 builder.Services.AddSession(o => { o.Cookie.Name = ".RaceDay.Mvc"; o.Cookie.HttpOnly = true; o.Cookie.IsEssential = true; o.IdleTimeout = TimeSpan.FromMinutes(30); });
 builder.Services.AddHttpClient<ApiClient>();
 var app = builder.Build();
