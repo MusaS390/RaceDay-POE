@@ -34,6 +34,7 @@ public class AuthController(ApiClient api):BaseController
         if (!r.Ok){ModelState.AddModelError("",r.Error??"Registration failed.");return View(vm);}
   var u=r.Data; HttpContext.Session.SetInt32("UserId",u.GetProperty("userId").GetInt32()); HttpContext.Session.SetString("Role",vm.Role); HttpContext.Session.SetString("FullName",vm.FullName);
   return RedirectToAction("Index",vm.Role=="Organiser"?"Organiser":"Participant");
- }
- [HttpPost,ValidateAntiForgeryToken] public async Task<IActionResult> Logout(){if(SignedIn) await api.Post("api/auth/logout",new{});HttpContext.Session.Clear();return RedirectToAction("Index","Home");}
+        // Clears all stored session information
+    }
+    [HttpPost,ValidateAntiForgeryToken] public async Task<IActionResult> Logout(){if(SignedIn) await api.Post("api/auth/logout",new{});HttpContext.Session.Clear();return RedirectToAction("Index","Home");}
 }
