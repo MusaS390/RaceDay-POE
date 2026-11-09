@@ -1,0 +1,23 @@
+name: RaceDay Part 3 CI
+on:
+  push:
+    branches: [ main, part2, part3, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore
+        run: dotnet restore RaceDay.sln
+      - name: Build
+        run: dotnet build RaceDay.sln --configuration Release --no-restore
+      - name: Verify MVC project is present
+        run: test -f src/RaceDay.Mvc/RaceDay.Mvc.csproj
+      - name: Test
+        run: dotnet test RaceDay.sln --configuration Release --no-build --logger "console;verbosity=normal"
