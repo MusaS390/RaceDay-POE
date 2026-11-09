@@ -4,6 +4,7 @@ using RaceDay.Mvc.Services;
 var builder = WebApplication.CreateBuilder(args);
 // Register MVC controllers and views for handling web requests.
 builder.Services.AddControllersWithViews();
+// Register distributed memory cache for storing session data.
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(o => { o.Cookie.Name = ".RaceDay.Mvc"; o.Cookie.HttpOnly = true; o.Cookie.IsEssential = true; o.IdleTimeout = TimeSpan.FromMinutes(30); });
