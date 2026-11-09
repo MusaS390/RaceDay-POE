@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using RaceDay.Mvc.Models;
 using RaceDay.Mvc.Services;
 namespace RaceDay.Mvc.Controllers;
+
+//Start of Authenticatin controller 
 public class AuthController(ApiClient api):BaseController
 {
  public IActionResult Login()=>View(new LoginVm());
