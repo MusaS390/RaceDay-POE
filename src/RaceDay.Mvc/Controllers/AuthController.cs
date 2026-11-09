@@ -21,7 +21,8 @@ public class AuthController(ApiClient api):BaseController
         HttpContext.Session.SetString("Role",u.GetProperty("role").GetString()??"Participant");
         //Checks whether the API successfully authenticated the user.
   HttpContext.Session.SetString("FullName",u.GetProperty("fullName").GetString()??"");
-  return RedirectToAction("Index", Role=="Organiser"?"Organiser":"Participant");
+        //  Retrieves the authenticated user's information from the API response.
+        return RedirectToAction("Index", Role=="Organiser"?"Organiser":"Participant");
  }
  public IActionResult Register()=>View(new RegisterVm());
  [HttpPost,ValidateAntiForgeryToken] public async Task<IActionResult> Register(RegisterVm vm)
