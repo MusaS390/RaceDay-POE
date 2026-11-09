@@ -30,7 +30,8 @@ public class AuthController(ApiClient api):BaseController
  {
   if(!ModelState.IsValid)return View(vm);
   var r=await api.Post("api/auth/register",new{vm.FullName,vm.Email,vm.Password,vm.Role});
-  if(!r.Ok){ModelState.AddModelError("",r.Error??"Registration failed.");return View(vm);}
+        // Displays the registration page and prepares an empty registration model.
+        if (!r.Ok){ModelState.AddModelError("",r.Error??"Registration failed.");return View(vm);}
   var u=r.Data; HttpContext.Session.SetInt32("UserId",u.GetProperty("userId").GetInt32()); HttpContext.Session.SetString("Role",vm.Role); HttpContext.Session.SetString("FullName",vm.FullName);
   return RedirectToAction("Index",vm.Role=="Organiser"?"Organiser":"Participant");
  }
