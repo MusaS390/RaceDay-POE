@@ -19,6 +19,7 @@ public class AuthController(ApiClient api):BaseController
         // 9. Checks whether the submitted login information passes validation.
 
         HttpContext.Session.SetString("Role",u.GetProperty("role").GetString()??"Participant");
+        //Checks whether the API successfully authenticated the user.
   HttpContext.Session.SetString("FullName",u.GetProperty("fullName").GetString()??"");
   return RedirectToAction("Index", Role=="Organiser"?"Organiser":"Participant");
  }
