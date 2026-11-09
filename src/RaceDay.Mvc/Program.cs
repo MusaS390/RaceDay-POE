@@ -1,3 +1,4 @@
+// Import the RaceDay API client service.
 using RaceDay.Mvc.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
