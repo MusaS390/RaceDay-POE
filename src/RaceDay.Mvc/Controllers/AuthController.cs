@@ -11,7 +11,8 @@ public class AuthController(ApiClient api):BaseController
  [HttpPost,ValidateAntiForgeryToken] public async Task<IActionResult> Login(LoginVm vm)
  {
   if(!ModelState.IsValid)return View(vm);
-  var r=await api.Post("api/auth/login",new{vm.Email,vm.Password});
+        //Logs out the user and clears their session information.
+        var r =await api.Post("api/auth/login",new{vm.Email,vm.Password});
   if(!r.Ok){ModelState.AddModelError("","Email or password is incorrect, or the API is unavailable.");return View(vm);}
   var u=r.Data.GetProperty("user"); HttpContext.Session.SetInt32("UserId",u.GetProperty("userId").GetInt32());
   HttpContext.Session.SetString("Role",u.GetProperty("role").GetString()??"Participant");
