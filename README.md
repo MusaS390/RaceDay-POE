@@ -1,94 +1,272 @@
-# RaceDay — Part 2 RESTful API
+# RaceDay – Part 3 POE
 
-RaceDay is an event-management API for race organisers and participants. This repository continues the Part 1 ERD, endpoint plan and SQL Server schema. The API uses ASP.NET Core Web API, Entity Framework Core Code First, SQL Server, server-side session authentication, role-based authorization, Swagger, unit tests and GitHub Actions.
+## 1. Project Overview
 
-## Roles
+RaceDay is a race event management system developed to help organisers manage running events and allow participants to register, enrol in events and view their race results.
 
-- **Organiser:** create/update/delete events they manage, maintain event categories, view enrolments for their events, and create/update results.
-- **Participant:** view events and categories, manage their own profile, enrol in categories, cancel their own enrolments, and view their own results.
-- **Public:** register/login and browse events/categories.
+This project focuses on developing an **ASP.NET Core MVC frontend** that communicates with the RaceDay REST API developed in Part 2.
 
-## Repository layout
+The MVC application communicates with the API using HTTP requests. It does not directly access the SQL Server database or duplicate the business logic implemented in the API.
 
-- `docs/` — Part 1 ERD, SQL script, endpoint plan and DBML.
-- `src/RaceDay.Api/` — ASP.NET Core API.
-- `tests/RaceDay.Api.Tests/` — unit tests.
-- `.github/workflows/` — Part 1 documentation validation and Part 2 build/test CI.
+## 2. Project Objectives
 
-## Requirements
+The main objectives of the RaceDay system are to:
 
-- .NET 8 SDK
-- SQL Server or SQL Server LocalDB
-- Visual Studio 2022 (ASP.NET and web development workload) or VS Code
-- SQL Server Management Studio (SSMS), recommended
+- Provide a user-friendly interface for participants and organisers.
+- Allow users to register and log in securely.
+- Allow participants to browse available race events.
+- Allow participants to enrol in event categories.
+- Allow participants to view their enrolments and race results.
+- Allow organisers to create and manage race events.
+- Allow organisers to manage event categories and enrolments.
+- Allow organisers to record and update race results.
+- Provide a consistent and responsive user interface.
 
-## Database setup
+## 3. Technologies Used
 
-1. Open SSMS and connect to your SQL Server.
-2. Run `docs/raceday.sql` to create and seed the `RaceDay` database.
-3. The Part 1 seed passwords are placeholders, not usable login credentials. For Part 2 testing, register users through `/api/auth/register` with your own test passwords. Do not expose real passwords in source control.
-4. If you use a server other than LocalDB, update `ConnectionStrings:RaceDay` in `src/RaceDay.Api/appsettings.json` or set the `ConnectionStrings__RaceDay` environment variable.
+The following technologies were used in developing the RaceDay application:
 
-> Warning: `docs/raceday.sql` drops an existing `RaceDay` database before recreating it. Back up any data before running it.
+- **C#** – Main programming language.
+- **ASP.NET Core MVC** – Used to develop the frontend application.
+- **ASP.NET Core Web API** – Handles backend operations and data processing.
+- **Razor Views** – Used to create dynamic user interface pages.
+- **HTML5** – Structures the web pages.
+- **CSS3** – Styles the application.
+- **JavaScript** – Adds client-side functionality.
+- **SQL Server** – Stores application data.
+- **HttpClient** – Allows the MVC application to communicate with the API.
+- **ASP.NET Core Session** – Maintains user session information.
+- **Visual Studio** – Development environment.
+- **Git and GitHub** – Used for version control and source code management.
 
-## Run the API
+## 4. Solution Structure
 
-From the repository root:
+The solution contains the following main projects:
 
-```bash
-dotnet restore RaceDay.sln
-dotnet build RaceDay.sln
-dotnet run --project src/RaceDay.Api/RaceDay.Api.csproj
+### RaceDay.Api
+The backend Web API responsible for handling application requests, business logic, authentication and database operations.
+
+### RaceDay.Mvc
+The frontend MVC application responsible for displaying pages and allowing users to interact with the RaceDay system.
+
+### RaceDay.Tests
+The testing project used to perform automated tests on the application where applicable.
+
+## 5. User Roles
+
+The RaceDay application supports two main user roles.
+
+### Participant
+
+Participants can:
+
+- Register for an account.
+- Log in and log out.
+- View available race events.
+- View event details and categories.
+- Enrol in event categories.
+- View their enrolled events.
+- View their race results.
+- Update their profile information.
+
+### Organiser
+
+Organisers can:
+
+- Access the organiser dashboard.
+- Create new race events.
+- View existing events.
+- Update event information.
+- Delete events.
+- Manage event categories.
+- View participant enrolments.
+- Record and update race results.
+
+## 6. Installation Requirements
+
+Before running the application, ensure that the following software is installed:
+
+1. Visual Studio.
+2. The .NET SDK version required by the solution.
+3. SQL Server LocalDB or the configured SQL Server instance.
+4. Git (if cloning the project from GitHub).
+
+The Visual Studio installation should include the **ASP.NET and web development** workload.
+
+## 7. Database Configuration
+
+The application uses SQL Server for data storage through the RaceDay API.
+
+Open the following file:
+
+`RaceDay.Api/appsettings.json`
+
+Check that the database connection string points to the correct SQL Server instance.
+
+Example LocalDB connection string:
+
+`Server=(localdb)\MSSQLLocalDB;Database=RaceDay;Trusted_Connection=True;TrustServerCertificate=True;`
+
+Make sure the RaceDay database and its required tables have been created using the SQL scripts supplied with the previous POE parts.
+
+## 8. API Configuration
+
+The MVC application communicates with the API through an HTTP client.
+
+Open:
+
+`RaceDay.Mvc/appsettings.json`
+
+The API base URL should match the address where the API is running.
+
+Example:
+
+```json
+{
+  "Api": {
+    "BaseUrl": "http://localhost:5194/"
+  }
+}
 ```
 
-Open the Swagger URL shown in the console (normally `https://localhost:7194/swagger`).
+If the API uses a different port on your computer, update the URL accordingly.
 
-### Authentication in Swagger
+## 9. How to Run the Application
 
-1. Call `POST /api/auth/register` with `fullName`, `email`, `password` (minimum 8 characters), and `role` (`Organiser` or `Participant`).
-2. Or call `POST /api/auth/login` with `email` and `password`.
-3. The API establishes an HTTP-only `.RaceDay.Session` cookie. Keep using the same browser/session when testing protected endpoints.
-4. Call `POST /api/auth/logout` to clear the session.
+The API and MVC frontend must both be running for the complete application to work.
 
-The session is server-side, and the API never returns or stores the original password. For production deployment, configure HTTPS, a persistent/distributed session store, secure cookie settings, CSRF protections for cookie-authenticated state-changing requests, rate limiting, and a secrets manager.
+### Step 1: Open the Solution
 
-## Run unit tests
+Open the RaceDay solution in Visual Studio.
 
-```bash
-dotnet test RaceDay.sln
-```
+### Step 2: Build the Solution
 
-The test project checks password hashing, the model's core relationships and the accepted role allowlist. The CI workflow restores, builds and runs the test suite on each push and pull request.
+Select:
 
-## Endpoint specification
+**Build → Build Solution**
 
-See [`docs/api-endpoints.md`](docs/api-endpoints.md). This is aligned to the endpoint list in the supplied Part 1 PDF.
+Wait for the build process to finish and check that there are no compilation errors.
 
-## GitHub Actions
+### Step 3: Start the API
 
-The workflow at `.github/workflows/raceday-api-ci.yml` runs restore, build and tests. The existing Part 1 workflow is retained. After pushing the repository, open **GitHub → Actions**, confirm the latest run is green, and add a genuine screenshot below.
+1. In Solution Explorer, right-click `RaceDay.Api`.
+2. Select **Set as Startup Project**.
+3. Press F5 or Ctrl + F5.
+4. If Swagger is enabled, open:
 
-### Successful CI screenshot
+`http://localhost:5194/swagger`
 
-Replace `docs/github-actions-success.png` with your actual green workflow screenshot before submission.
+Keep the API running.
 
-![GitHub Actions success screenshot](docs/github-actions-success.png)
+### Step 4: Start the MVC Application
 
-## Video presentation
+1. Return to Solution Explorer.
+2. Right-click `RaceDay.Mvc`.
+3. Select **Set as Startup Project**.
+4. Press F5 or Ctrl + F5.
 
-Add your actual unlisted YouTube link after recording:
+The MVC application should open at its configured launch address.
 
-`PASTE-YOUR-UNLISTED-YOUTUBE-LINK-HERE`
+Example:
 
-The video should demonstrate Swagger, registration/login, the two roles, event/category management, enrolment, results, the database schema and unit tests.
+`https://localhost:7294/Auth/Login`
 
-## Important submission notes
+### Step 5: Log In or Register
 
-- Make at least 20 meaningful commits using your own GitHub account; do not fabricate history.
-- Run the solution locally and fix any environment-specific issues before submission.
-- A screenshot and YouTube URL must be real artifacts from your own run; placeholders are not proof of a successful build.
-\n\n## Part 3 MVC\nSee [README-PART3.md](README-PART3.md) for MVC setup, Docker instructions and remaining Part 2 API integration requirements.\n
+Use the registration or login page to access the application.
 
-## Part 3: start the MVC website
+The available pages and functionality depend on the user's assigned role.
 
-To see the RaceDay login screen, set `src/RaceDay.Mvc/RaceDay.Mvc.csproj` as the Visual Studio startup project. Run the API separately (`src/RaceDay.Api/RaceDay.Api.csproj`) because MVC consumes it. The MVC launch profile opens `https://localhost:7294/Auth/Login`; the API uses `http://localhost:5194`. See `README-PART3.md`.
+**Important:** Do not stop the API while using the MVC application. The frontend depends on the API to retrieve and update information.
+
+## 10. Authentication and Session Management
+
+The application uses authentication and session management to maintain user information while navigating between pages.
+
+The MVC application configures ASP.NET Core session services with:
+
+- An HTTP-only session cookie.
+- An essential session cookie.
+- A 30-minute session timeout.
+
+Users must log in before accessing protected application functionality.
+
+## 11. Version Control and GitHub
+
+Git and GitHub are used to manage the project's source code and track development progress.
+
+Meaningful commits should be made throughout development to document changes and improvements.
+
+Examples of commit messages include:
+
+- Initial RaceDay MVC setup.
+- Configure API communication.
+- Add authentication views.
+- Implement participant dashboard.
+- Add organiser event management.
+- Implement event category management.
+- Add participant enrolment functionality.
+- Implement race results functionality.
+- Improve application navigation.
+- Fix API connection configuration.
+- Update project documentation.
+
+Each commit should represent an actual development change.
+
+## 12. Troubleshooting
+
+### API Connection Error
+
+If the MVC application cannot connect to the API:
+
+- Ensure that `RaceDay.Api` is running.
+- Check the API port.
+- Verify the `BaseUrl` in `RaceDay.Mvc/appsettings.json`.
+- Restart the API and MVC applications if necessary.
+
+### Database Connection Error
+
+If the API cannot connect to SQL Server:
+
+- Check that SQL Server LocalDB is installed.
+- Verify the connection string.
+- Confirm that the RaceDay database exists.
+- Ensure that the database tables have been created.
+
+### Build Errors
+
+If the solution does not build:
+
+- Check the Error List in Visual Studio.
+- Restore NuGet packages.
+- Save all modified files.
+- Rebuild the solution.
+
+### Git Commit Problems
+
+If the Commit All button is disabled:
+
+- Save the modified files.
+- Open the Git Changes window.
+- Check whether Git detects any changes.
+- Ensure that the correct repository is selected.
+- Enter a commit message before committing.
+
+## 13. Conclusion
+
+The RaceDay Part 3 project provides an MVC frontend that allows participants and organisers to interact with the RaceDay system through a web-based interface.
+
+By integrating the MVC application with the REST API developed in Part 2, the project separates the frontend from backend processing and database operations.
+
+The application demonstrates the use of ASP.NET Core MVC, API integration, session management, database-backed functionality and Git version control in developing a web-based race event management system.
+
+Youtube video link : 
+Github link : https://github.com/MusaS390/RaceDay-POE
+---
+
+**Project Name:** RaceDay  
+**POE Part:** Part 3 – MVC Frontend  
+**Student Name:** Musa Simelane 
+**Student Number:** ST10496330  
+**Module:** Programming  
+**Submission Date:** 09/11/2026
