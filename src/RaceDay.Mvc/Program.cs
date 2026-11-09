@@ -2,6 +2,7 @@
 using RaceDay.Mvc.Services;
 // Create the application builder and load configuration settings.
 var builder = WebApplication.CreateBuilder(args);
+// Register MVC controllers and views for handling web requests.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddHttpContextAccessor();
