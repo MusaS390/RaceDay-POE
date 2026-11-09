@@ -1,5 +1,6 @@
 // Import the RaceDay API client service.
 using RaceDay.Mvc.Services;
+// Create the application builder and load configuration settings.
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
