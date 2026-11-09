@@ -7,6 +7,7 @@ namespace RaceDay.Mvc.Controllers;
 public class AuthController(ApiClient api):BaseController
 {
  public IActionResult Login()=>View(new LoginVm());
+    //Saves the newly registered user's information in the session.
  [HttpPost,ValidateAntiForgeryToken] public async Task<IActionResult> Login(LoginVm vm)
  {
   if(!ModelState.IsValid)return View(vm);
