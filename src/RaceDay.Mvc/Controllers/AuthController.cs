@@ -16,7 +16,9 @@ public class AuthController(ApiClient api):BaseController
         //  Manages user authentication, registration and logout functionality for RaceDay.
         if (!r.Ok){ModelState.AddModelError("","Email or password is incorrect, or the API is unavailable.");return View(vm);}
   var u=r.Data.GetProperty("user"); HttpContext.Session.SetInt32("UserId",u.GetProperty("userId").GetInt32());
-  HttpContext.Session.SetString("Role",u.GetProperty("role").GetString()??"Participant");
+        // 9. Checks whether the submitted login information passes validation.
+
+        HttpContext.Session.SetString("Role",u.GetProperty("role").GetString()??"Participant");
   HttpContext.Session.SetString("FullName",u.GetProperty("fullName").GetString()??"");
   return RedirectToAction("Index", Role=="Organiser"?"Organiser":"Participant");
  }
