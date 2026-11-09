@@ -260,7 +260,8 @@ By integrating the MVC application with the REST API developed in Part 2, the pr
 
 The application demonstrates the use of ASP.NET Core MVC, API integration, session management, database-backed functionality and Git version control in developing a web-based race event management system.
 
-Youtube video link : 
+Youtube video link : https://youtu.be/LNyDPjnac9E?si=AG2dP3ISAXJoXye_
+
 Github link : https://github.com/MusaS390/RaceDay-POE
 ---
 
